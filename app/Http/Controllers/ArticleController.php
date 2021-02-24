@@ -39,4 +39,25 @@ class ArticleController extends Controller
         $request->session()->flash('status', 'Article has been created!');
         return redirect()->route('articles.index');
     }
+
+    public function edit($id)
+    {
+        $article = Article::findOrFail($id);
+        return view('article.edit', compact('article', 'id'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
+        $data = $this->validate($request, [
+            'name' => 'required|unique:articles,name,' . $article->id,
+            'body' => 'required|min:100'
+        ]);
+
+        $article->fill($data);
+        $article->save();
+        $request->session()->flash('status', 'Article has been updated!');
+        return redirect()->route('articles.index');
+    }
+
 }
