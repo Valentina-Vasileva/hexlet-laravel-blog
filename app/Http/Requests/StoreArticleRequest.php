@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class StoreArticleRequest extends FormRequest
 {
@@ -21,29 +22,15 @@ class StoreArticleRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        switch($this->method())
-        {
-            case 'POST':
-            {
-                return [
-                    'name' => 'required|unique:articles',
-                    'body' => 'required|min:100'
-                ];
-            }
-            case 'PATCH':
-            {
-                return [
-                    'name' => 'required|unique:articles,name,' . $this->route('id'),
-                    'body' => 'required|min:100'
-                ];
-            }
-            default: 
-            {
-                break;
-            }
-        }
+
+        $rules = [
+            'name' => 'required|unique:articles',
+            'body' => 'required|min:100'
+        ];
+        
+        return $rules;
     
     }
 }
